@@ -31,7 +31,18 @@ int main(void)
   *pPortModeReg &= ~(0x3 << 26);  // Clear bits 27:26
   *pPortModeReg |=  (0x1 << 26);  // Set bit 26 (MODE13 = 01)
 
-  *pPortOutReg |= (1 << 13);
+  while (1)
+  {
+    // Set pin 13 (turn LED on if active low)
+    *pPortOutReg |= (1 << 13);
 
-  while (1);
+    // crude delay
+    for (volatile int i = 0; i < 100000; i++);
+
+    // Clear pin 13 (turn LED off)
+    *pPortOutReg &= ~(1 << 13);
+
+    // crude delay
+    for (volatile int i = 0; i < 100000; i++);
+  }
 }

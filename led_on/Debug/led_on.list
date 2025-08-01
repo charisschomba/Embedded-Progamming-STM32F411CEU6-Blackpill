@@ -27,25 +27,25 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  000012e8  2**0
                   CONTENTS, READONLY
- 12 .debug_info   0000011e  00000000  00000000  00001318  2**0
+ 12 .debug_info   00000101  00000000  00000000  00001318  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 000000bc  00000000  00000000  00001436  2**0
+ 13 .debug_abbrev 00000098  00000000  00000000  00001419  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00000048  00000000  00000000  000014f8  2**3
+ 14 .debug_aranges 00000048  00000000  00000000  000014b8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_rnglists 0000002c  00000000  00000000  00001540  2**0
+ 15 .debug_rnglists 0000002c  00000000  00000000  00001500  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  00000f8e  00000000  00000000  0000156c  2**0
+ 16 .debug_macro  00000f8e  00000000  00000000  0000152c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   000003de  00000000  00000000  000024fa  2**0
+ 17 .debug_line   000003de  00000000  00000000  000024ba  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    00003ca1  00000000  00000000  000028d8  2**0
+ 18 .debug_str    00003ca1  00000000  00000000  00002898  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  00006579  2**0
+ 19 .comment      00000043  00000000  00000000  00006539  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00000058  00000000  00000000  000065bc  2**2
+ 20 .debug_frame  00000058  00000000  00000000  0000657c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 0000005c  00000000  00000000  00006614  2**0
+ 21 .debug_line_str 0000005c  00000000  00000000  000065d4  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -86,17 +86,17 @@ Disassembly of section .text:
 int main(void)
 {
  80001d8:	b480      	push	{r7}
- 80001da:	b087      	sub	sp, #28
+ 80001da:	b085      	sub	sp, #20
  80001dc:	af00      	add	r7, sp, #0
   uint32_t *pClkCtrlReg   = (uint32_t*) 0x40023830;  // RCC AHB1 peripheral clock enable register
  80001de:	4b10      	ldr	r3, [pc, #64]	@ (8000220 <main+0x48>)
  80001e0:	60fb      	str	r3, [r7, #12]
   uint32_t *pPortModeReg  = (uint32_t*) 0x40020800;  // GPIOC mode register (for port)
  80001e2:	4b10      	ldr	r3, [pc, #64]	@ (8000224 <main+0x4c>)
- 80001e4:	617b      	str	r3, [r7, #20]
+ 80001e4:	60bb      	str	r3, [r7, #8]
   uint32_t *pPortOutReg   = (uint32_t*) 0x40020814;  // GPIOC output data register (ODR)
  80001e6:	4b10      	ldr	r3, [pc, #64]	@ (8000228 <main+0x50>)
- 80001e8:	613b      	str	r3, [r7, #16]
+ 80001e8:	607b      	str	r3, [r7, #4]
 
   // 1. Enable clock to GPIO C13 port (assuming GPIOC, bit 2 in RCC AHB1ENR)
   *pClkCtrlReg |= 0x00000004;
@@ -108,23 +108,23 @@ int main(void)
 
   // 2. Configure pin C13 as output (bits 27:26 = 01 for pin 13)
   *pPortModeReg &= ~(0x3 << 26);  // Clear bits 27:26
- 80001f6:	697b      	ldr	r3, [r7, #20]
+ 80001f6:	68bb      	ldr	r3, [r7, #8]
  80001f8:	681b      	ldr	r3, [r3, #0]
  80001fa:	f023 6240 	bic.w	r2, r3, #201326592	@ 0xc000000
- 80001fe:	697b      	ldr	r3, [r7, #20]
+ 80001fe:	68bb      	ldr	r3, [r7, #8]
  8000200:	601a      	str	r2, [r3, #0]
   *pPortModeReg |=  (0x1 << 26);  // Set bit 26 (MODE13 = 01)
- 8000202:	697b      	ldr	r3, [r7, #20]
+ 8000202:	68bb      	ldr	r3, [r7, #8]
  8000204:	681b      	ldr	r3, [r3, #0]
  8000206:	f043 6280 	orr.w	r2, r3, #67108864	@ 0x4000000
- 800020a:	697b      	ldr	r3, [r7, #20]
+ 800020a:	68bb      	ldr	r3, [r7, #8]
  800020c:	601a      	str	r2, [r3, #0]
 
   *pPortOutReg |= (1 << 13);
- 800020e:	693b      	ldr	r3, [r7, #16]
+ 800020e:	687b      	ldr	r3, [r7, #4]
  8000210:	681b      	ldr	r3, [r3, #0]
  8000212:	f443 5200 	orr.w	r2, r3, #8192	@ 0x2000
- 8000216:	693b      	ldr	r3, [r7, #16]
+ 8000216:	687b      	ldr	r3, [r7, #4]
  8000218:	601a      	str	r2, [r3, #0]
 
   while (1);
